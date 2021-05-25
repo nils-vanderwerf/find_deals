@@ -51,4 +51,6 @@
         
             end
 
-            Which city are you in?
+            Sends an array to the scraper, which in turn appends it to the url
+
+            A class is created using the each, which includes values for title
