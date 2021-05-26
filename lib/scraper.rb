@@ -9,7 +9,7 @@ class Scraper
         make_instances(doc, full_url)
     end
 
-    self.make_instances(scraped_page, url)
+    def self.make_instances(scraped_page, url)
     deal_cards = scraped_page.css("div.deal-item")
     deal_cards.each do |deal|
         title = deal.css("h3.deal-title span").text.strip
@@ -29,15 +29,13 @@ class Scraper
         end
         binding.pry
     end
-end
-
-
-    ##Create function for each loop above
-    #
-
+end 
     def self.get_more_details(deal_instance, url)
         doc = Nokogiri::HTML(open(url))
         deal_instance.about = doc.css('.styles__Content-sc-14qr04h-6').text.strip
         binding.pry
     end
 end
+
+    ##Create function for each loop above
+    #

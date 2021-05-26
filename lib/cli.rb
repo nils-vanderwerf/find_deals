@@ -1,6 +1,6 @@
 #CLI Controller
-require_relative '../config/environment.rb'
-require_relative './scraper.rb'
+require_relative '../config/environment'
+require_relative './scraper'
 
 class FindDeals::CLI
     attr_accessor :all_input
@@ -72,41 +72,41 @@ class FindDeals::CLI
 
     def get_category_input
         input = nil
-            input = gets.strip.downcase
+        input = gets.strip.downcase
             case input
-            when "1", "anything"
-              all_input[1] = ""
-              puts "Here are some great deals:"
-            when "2"
-                all_input[1] = "dining"
-                puts "Here are some great dining deals:"
-            when "3", "wellness and beauty"
-                all_input[1] = "wellness-beauty"
-                puts "Here are some great wellness & beauty deals:"
-            when "4"
-                all_input[1] = "activities"
-                puts "Here are some great deals on activities:"
-            when "5"
-                all_input[1] = "travel"
-                puts "Here are some great travel deals:"
-            when "6",
-                all_input[1] = "shopping" 
-                puts "Here are some great shopping deals:"
-                ##Deals
-                ##Redirect to the link
-            when "7"
-                all_input[1] = "services" 
-                puts "Here are some great services deals:"
-            when "8"
-                all_input[1] = "wine" 
-                puts "Here are some great wine deals:"
-            when "9", "personalised gifts"
-                all_input[1] = "personalised-gifts" 
-                puts "Here are some great personalised gifts deals:"
-            when "dining", 'wellness & beauty', 'activities', 'travel' 'shopping', 'services', "wine", "personalised-gifts"
-                all_input[1] = input
-            else
-                puts "Sorry, we don't recognise that input"
+                when "1", "anything"
+                all_input[1] = ""
+                puts "Here are some great deals:"
+                when "2"
+                    all_input[1] = "dining"
+                    puts "Here are some great dining deals:"
+                when "3", "wellness and beauty"
+                    all_input[1] = "wellness-beauty"
+                    puts "Here are some great wellness & beauty deals:"
+                when "4"
+                    all_input[1] = "activities"
+                    puts "Here are some great deals on activities:"
+                when "5"
+                    all_input[1] = "travel"
+                    puts "Here are some great travel deals:"
+                when "6",
+                    all_input[1] = "shopping" 
+                    puts "Here are some great shopping deals:"
+                    ##Deals
+                    ##Redirect to the link
+                when "7"
+                    all_input[1] = "services" 
+                    puts "Here are some great services deals:"
+                when "8"
+                    all_input[1] = "wine" 
+                    puts "Here are some great wine deals:"
+                when "9", "personalised gifts"
+                    all_input[1] = "personalised-gifts" 
+                    puts "Here are some great personalised gifts deals:"
+                when "dining", 'wellness & beauty', 'activities', 'travel' 'shopping', 'services', "wine", "personalised-gifts"
+                    all_input[1] = input
+                else
+                    puts "Sorry, we don't recognise that input"
             end
         puts "Category Input: #{@all_input}"
         Scraper.get_page(all_input)
