@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "lib/find_deals/version"
+require_relative "lib/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "find_deals"
@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/nils-vanderwerf/find_promo_app"
+  spec.metadata["source_code_uri"] = "https://github.com/nils-vanderwerf/find_deals"
   spec.metadata["changelog_uri"] = "https://github.com/nils-vanderwerf/find_promo_app/blob/master/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
@@ -34,10 +34,14 @@ Gem::Specification.new do |spec|
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
 
-  spec.add_development_dependency "bundler", "~> 1.10"
+  spec.add_development_dependency "bundler", "~> 2.2.11"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_dependency "require_all"
+
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "pry"
+
+
 
   spec.add_dependency "nokogiri"
 end

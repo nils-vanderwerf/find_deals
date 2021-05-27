@@ -2,6 +2,8 @@ PATH
   remote: .
   specs:
     find_deals (0.1.0)
+      nokogiri
+      require_all
 
 GEM
   remote: https://rubygems.org/
@@ -22,6 +24,7 @@ GEM
     rainbow (3.0.0)
     rake (13.0.3)
     regexp_parser (2.1.1)
+    require_all (3.0.0)
     rexml (3.2.5)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
@@ -54,10 +57,11 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
+  bundler (~> 2.2.11)
   find_deals!
-  nokogiri
   pry
   rake (~> 13.0)
+  require_all
   rspec (~> 3.0)
   rubocop (~> 1.7)
 

@@ -1,13 +1,19 @@
 # frozen_string_literal: true
-require 'sqlite3'
+require "sqlite3"
+require_relative "../lib/find_deals/version"
 
-# require 'bundler/setup'
-# Bundler.require
-# # require 'active_record'
-require 'nokogiri'
-require 'open-uri'
-require 'pry'
+require "nokogiri"
+require "open-uri"
+require "pry"
 
-require_relative '../lib/version'
-require_relative '../lib/cli'
-require_relative '../lib/scraper'
+require "require_all"
+require_all "lib" #load up all files in the lib directory and its subdirectories
+
+
+
+
+
+
+
+
+
