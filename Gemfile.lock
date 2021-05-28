@@ -2,30 +2,53 @@ PATH
   remote: .
   specs:
     find_deals (0.1.0)
+      activerecord
       nokogiri
       require_all
+      sinatra-activerecord
+      sqlite3
 
 GEM
   remote: https://rubygems.org/
   specs:
-    ast (2.4.2)
+    activemodel (5.2.6)
+      activesupport (= 5.2.6)
+    activerecord (5.2.6)
+      activemodel (= 5.2.6)
+      activesupport (= 5.2.6)
+      arel (>= 9.0)
+    activesupport (5.2.6)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    arel (9.0.0)
     coderay (1.1.3)
+    concurrent-ruby (1.1.8)
+    database_cleaner (2.0.1)
+      database_cleaner-active_record (~> 2.0.0)
+    database_cleaner-active_record (2.0.1)
+      activerecord (>= 5.a)
+      database_cleaner-core (~> 2.0.0)
+    database_cleaner-core (2.0.1)
     diff-lcs (1.4.4)
+    i18n (1.8.10)
+      concurrent-ruby (~> 1.0)
     method_source (1.0.0)
+    minitest (5.14.4)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
     nokogiri (1.11.5-x86_64-darwin)
       racc (~> 1.4)
-    parallel (1.20.1)
-    parser (3.0.1.1)
-      ast (~> 2.4.1)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
     racc (1.5.2)
-    rainbow (3.0.0)
+    rack (2.2.3)
+    rack-protection (2.1.0)
+      rack
     rake (13.0.3)
-    regexp_parser (2.1.1)
     require_all (3.0.0)
-    rexml (3.2.5)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -39,32 +62,35 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.2)
-    rubocop (1.15.0)
-      parallel (~> 1.10)
-      parser (>= 3.0.0.0)
-      rainbow (>= 2.2.2, < 4.0)
-      regexp_parser (>= 1.8, < 3.0)
-      rexml
-      rubocop-ast (>= 1.5.0, < 2.0)
-      ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 3.0)
-    rubocop-ast (1.5.0)
-      parser (>= 3.0.1.1)
-    ruby-progressbar (1.11.0)
-    unicode-display_width (2.0.0)
+    ruby2_keywords (0.0.4)
+    sinatra (2.1.0)
+      mustermann (~> 1.0)
+      rack (~> 2.2)
+      rack-protection (= 2.1.0)
+      tilt (~> 2.0)
+    sinatra-activerecord (2.0.23)
+      activerecord (>= 4.1)
+      sinatra (>= 1.0)
+    sqlite3 (1.4.2)
+    thread_safe (0.3.6)
+    tilt (2.0.10)
+    tzinfo (1.2.9)
+      thread_safe (~> 0.1)
 
 PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
+  activerecord (~> 5.2.3)
   bundler (~> 2.2.11)
+  database_cleaner
   find_deals!
-  nokogiri
   pry
-  rake (~> 13.0)
+  rake
   require_all
-  rspec (~> 3.0)
-  rubocop (~> 1.7)
+  rspec
+  sinatra-activerecord
+  sqlite3
 
 BUNDLED WITH
    2.2.11
