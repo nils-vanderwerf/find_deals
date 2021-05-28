@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 require "sqlite3"
-require_relative "../lib/find_deals/version"
+require_relative "../lib/version"
 
 require "nokogiri"
 require "open-uri"

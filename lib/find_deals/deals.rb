@@ -17,15 +17,21 @@ class FindDeals::Deal
         @@all
     end
 
-    def self.print
-        puts "=================================="
-            puts self.title.upcase
-            puts self.location
-            puts self.price
-            puts self.promotion
-            puts "BUY NOW"
-            puts self.url
-        puts "=================================="
+    def print
+        puts "===================================================================="
+            puts "#{self.title.upcase}"
+            puts "#{self.location}"
+            puts "#{self.price} - #{self.promotion.upcase}"
+        puts "===================================================================="
+    end
+
+    def print_about_details
+        puts "===================================================================="
+        puts "#{self.title.upcase}"
+        puts "===================================================================="
+        puts "#{self.about}"
+        puts "===================================================================="
+        puts "BUY NOW AT #{self.url}"
     end
 
     def self.reset_all

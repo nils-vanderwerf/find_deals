@@ -59,6 +59,7 @@ PLATFORMS
 DEPENDENCIES
   bundler (~> 2.2.11)
   find_deals!
+  nokogiri
   pry
   rake (~> 13.0)
   require_all

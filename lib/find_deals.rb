@@ -1,4 +1,4 @@
-require_relative "./find_deals/version"
+require_relative "./version"
 
 module FindDeals
     class Error < StandardError; end
