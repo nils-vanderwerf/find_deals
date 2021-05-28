@@ -32,6 +32,7 @@ class FindDeals::Deal
         puts "#{self.about}"
         puts "===================================================================="
         puts "BUY NOW AT #{self.url}"
+        puts "===================================================================="
     end
 
     def self.reset_all
