@@ -1,12 +1,15 @@
 # frozen_string_literal: true
-
 require "bundler/gem_tasks"
-require "rspec/core/rake_task"
-
-RSpec::Core::RakeTask.new(:spec)
-
 require "rubocop/rake_task"
+require_relative "./config/environment"
+require "sinatra/activerecord/rake" 
 
 RuboCop::RakeTask.new
 
-task default: %i[spec rubocop]
+task default: :rubocop
+
+task :console do
+    require 'irb'
+    ARGV.clear ##basically a variable that contains the arguments passed to a program through the command line.
+    IRB.start
+  end

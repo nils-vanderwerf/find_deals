@@ -23,6 +23,7 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (9.0.0)
+    ast (2.4.2)
     coderay (1.1.3)
     concurrent-ruby (1.1.8)
     database_cleaner (2.0.1)
@@ -40,6 +41,9 @@ GEM
       ruby2_keywords (~> 0.0.1)
     nokogiri (1.11.5-x86_64-darwin)
       racc (~> 1.4)
+    parallel (1.20.1)
+    parser (3.0.1.1)
+      ast (~> 2.4.1)
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -47,8 +51,11 @@ GEM
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
+    rainbow (3.0.0)
     rake (13.0.3)
+    regexp_parser (2.1.1)
     require_all (3.0.0)
+    rexml (3.2.5)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -62,6 +69,18 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-support (3.10.2)
+    rubocop (1.15.0)
+      parallel (~> 1.10)
+      parser (>= 3.0.0.0)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8, < 3.0)
+      rexml
+      rubocop-ast (>= 1.5.0, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 3.0)
+    rubocop-ast (1.5.0)
+      parser (>= 3.0.1.1)
+    ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.4)
     sinatra (2.1.0)
       mustermann (~> 1.0)
@@ -76,19 +95,21 @@ GEM
     tilt (2.0.10)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
+    unicode-display_width (2.0.0)
 
 PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
-  activerecord (~> 5.2.3)
+  activerecord (~> 5.2)
   bundler (~> 2.2.11)
   database_cleaner
   find_deals!
   pry
-  rake
+  rake (~> 13.0)
   require_all
   rspec
+  rubocop (~> 1.7)
   sinatra-activerecord
   sqlite3
 
