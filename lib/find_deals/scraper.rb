@@ -7,7 +7,7 @@ class FindDeals::Scraper
         @base_url = "https://www.scoopon.com.au"
         @full_url = "#{@base_url}/#{city}/#{category}"
         @html = open(@full_url)
-        @doc = Nokogiri::HTML(@html)
+        @doc = Nokogiri::HTML(@html) #Nokogiri is an API for reading and witing XML and HTML from ruby
         make_instances
     end
 

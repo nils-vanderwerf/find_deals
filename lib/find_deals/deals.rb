@@ -1,4 +1,4 @@
-class FindDeals::Deal 
+class FindDeals::Deal < ActiveRecord::Base
     attr_accessor :title, :location, :url, :price, :promotion, :about
 
     @@all = []
