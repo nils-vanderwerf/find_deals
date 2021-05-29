@@ -118,8 +118,43 @@ class FindDeals::CLI
             else 
                 puts "Invalid input. Please try again"
             end
+            save_deal
         end
 
+        def save_deal
+            puts "Would you like to save this deal. Y or N"
+            input = ""
+            input = gets.strip.downcase
+            while input != "y" || input != "n" || input != "quit"
+            if input == "y"
+                puts "Saving deal..."
+                ##save to database
+                puts "Would you like to see your saved deals?"
+                ##show saved deals
+            elsif input == "n"
+                another_deal
+            else
+                puts "Invalid input. Please try again"
+            end 
+            end
+        end
+
+    def another_deal
+        puts "Would you like to check out another deal? Y or N"
+        input = ""
+        input = gets.strip.downcase
+        while input != "y" || input != "n" || input != "quit"
+            if input == "y"
+                @city_input = ""
+                @category_input = ""
+                prompt_user_city
+            elsif input == "n"
+                exit
+            else
+                puts "Invalid input. Please try again"
+            end 
+        end
+    end
     def show_option_to_quit
         puts ""
         puts "===================================================================="
