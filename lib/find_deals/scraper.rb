@@ -29,9 +29,9 @@ class FindDeals::Scraper
             about_info = get_more_info(url)
             about = about_info.css('.styles__Content-sc-14qr04h-6').text.strip
             #Limit to 10 results
-            # if FindDeals::Deal.all.length < 10 
+            if FindDeals::Deal.all.length < 10 
                 FindDeals::Deal.new(title: title, url: url, location: location, price: price, promotion: promotion, about: about)
-            # end
+            end
         end 
     end
     # binding.pry

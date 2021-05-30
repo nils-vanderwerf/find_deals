@@ -12,7 +12,7 @@
 
 ActiveRecord::Schema.define(version: 1) do
 
-  create_table "deals", force: :cascade do |t|
+  create_table "saved_deals", force: :cascade do |t|
     t.string "title"
     t.string "url"
     t.string "location"

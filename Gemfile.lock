@@ -101,7 +101,7 @@ PLATFORMS
   x86_64-darwin-20
 
 DEPENDENCIES
-  activerecord (~> 5.2.6)
+  activerecord (~> 5.2)
   bundler (~> 2.2.11)
   database_cleaner
   find_deals!
