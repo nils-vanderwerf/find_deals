@@ -123,9 +123,9 @@ class FindDeals::CLI
         end
 
         def save_deal(deal)
-            puts ""
+            input = ""
+            puts "Would you like to save this deal? Y or N"
             input = gets.strip.downcase
-            check_input(input, "Would you like to save this deal. Y or N")
             if input == "y"
                 puts "Saving deal..."
                 deal.save
@@ -136,53 +136,39 @@ class FindDeals::CLI
             elsif input == "quit"
                 goodbye
             else
+                puts "Invalid input. Please try again"
+                save_deal(deal)
             end
         end
 
-    def check_input (input, prompt)
-        while input != y || input != n || input != 'quit'
-            puts "Invalid input. Please try again"
-            puts ""
-            puts prompt ##e.g "Would you like to see your saved deals? Y or N"
-            input = gets.strip.downcase 
-            binding.pry       
-        end
-    end
 
     def show_deals
+        input = ""
+        puts "Would you like to see your saved deals? Y or N"
+        input = gets.strip.downcase
 
-            input = ""
-            input = gets.strip.downcase
-            check_input(input, "Would you like to see your saved deals? Y or N")
-            if input == "y"
-                @deals.all.each.with_index(1) do |deal, index|
-                    puts "#{index}." 
-                    puts deal.print
-                end
-            elsif input == "n"
-                another_deal
-            elsif input == "quit"
-                goodbye
-            else 
-                puts "Invalid input. Please try again"
+        if input == "y"
+            @deals.all.each.with_index(1) do |deal, index|
+                puts "#{index}." 
+                puts deal.print
             end
+        elsif input == "n"
+            another_deal
+        elsif input == "quit"
+            goodbye
+        else 
+            puts "Invalid input. Please try again"
+        end
 
     end
 
     def another_deal
         puts "===================================================================="
         puts ""
-        puts "Would you like to check out another deal? Y or N"
-        puts "To delete a saved deal type delete"
         input = ""
+        puts "Would you like to check out another deal? Y or N"
+        puts "To delete a saved deal type D"
         input = gets.strip.downcase
-        while input != y || input != n || input != delete || input == "quit" 
-            puts "Invalid input. Please try again"
-            puts ""
-            puts "Type in the number of the deal you would like to delete" 
-            input = ""
-            input = gets.strip.downcase            
-        end
 
             if input == "y"
                 @city_input = ""
@@ -200,16 +186,11 @@ class FindDeals::CLI
     end
 
     def delete_record 
+        puts "===================================================================="
+        puts ""
         input = ""
+        puts "Type in the number of the deal you would like to delete" 
         input = gets.strip.downcase
-            while input.to_i != 0 && input.to_i <= FindDeals::SavedDeals.all.size
-            puts "Invalid input. Please try again"
-            puts ""
-            puts "Type in the number of the deal you would like to delete" 
-            input = ""
-            input = gets.strip.downcase
-            
-        end
         
         if input.to_i != 0 && input.to_i <= FindDeals::SavedDeals.all.size
             FindDeals::SavedDeals.all.delete_from_db(input.to_i)
