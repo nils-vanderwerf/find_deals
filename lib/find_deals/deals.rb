@@ -21,7 +21,7 @@ class FindDeals::Deal
         puts "===================================================================="
             puts "#{self.title.upcase}"
             puts "#{self.location}"
-            puts "#{self.price} - #{self.promotion.upcase}"
+            puts "$#{self.price.to_i} - UP TO #{self.promotion.to_i}% OFF"
         puts "===================================================================="
     end
 
@@ -37,8 +37,12 @@ class FindDeals::Deal
 
     def save
         # FindDeals::SavedDeals.connection
-        FindDeals::SavedDeals.create(title: self.title, location: self.location, url: self.url, price: self.price, promotion: self.promotion, about: self.about)
+        FindDeals::SavedDeals.find_or_create_by(title: self.title, location: self.location, url: self.url, price: self.price, promotion: self.promotion, about: self.about)
     end
+
+    def print_all_from_db
+
+    end        
     
 
     def self.reset_all

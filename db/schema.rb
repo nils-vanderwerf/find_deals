@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 1) do
     t.string "title"
     t.string "url"
     t.string "location"
-    t.float "price"
+    t.integer "price"
     t.integer "promotion"
     t.string "about"
   end

@@ -23,8 +23,8 @@ class FindDeals::Scraper
             location = 
             "#{deal.css(".deal-subtitle span.specific").text.strip} - #{deal.css(".deal-subtitle span.general").text.strip}"
             
-            price = deal.css('a div.deal-pricing div.price-box div.price-text').text.strip
-            promotion = deal.css('div.deal-saving').text.strip
+            price = deal.css('a div.deal-pricing div.price-box div.price-text').text.strip.gsub("$", "").to_i
+            promotion = deal.css('div.deal-saving span.amount-off').text.strip.gsub("%", "").to_i
             #store the page for that deal instance
             about_info = get_more_info(url)
             about = about_info.css('.styles__Content-sc-14qr04h-6').text.strip

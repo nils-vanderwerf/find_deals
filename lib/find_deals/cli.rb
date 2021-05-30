@@ -26,7 +26,7 @@ class FindDeals::CLI
         @city_input = ""
         @category_input = ""
         prompt_user_city
-
+        goodbye
     end
 
     def prompt_user_city
@@ -89,7 +89,6 @@ class FindDeals::CLI
     end
 
         def print_deals(city, category)
-            "Here are some great deals:"
             FindDeals::Deal.all.each.with_index(1) do |deal, index|
                 puts "#{index}." 
                 puts deal.print
@@ -114,6 +113,7 @@ class FindDeals::CLI
             if number != 0 && number <= FindDeals::Deal.all.size && input != "quit" ## to_i converts to 0 if not an integer
                 FindDeals::Deal.all[number - 1].print_about_details
             elsif input == "quit"
+                goodbye
                 exit
             else 
                 puts "Invalid input. Please try again"
@@ -128,10 +128,21 @@ class FindDeals::CLI
             if input == "y"
                 puts "Saving deal..."
                 deal.save
-                puts "Would you like to see your saved deals?"
-                ##show saved deals
+                puts "Would you like to see your saved deals? Y or N"
+                input = ""
+                input = gets.strip.downcase
+                if input == "y"
+                    FindDeals::SavedDeals.all.each do |d|
+                        puts "#{d.id}." 
+                        puts d.print
+                    end
+                    another_deal
+                end
             elsif input == "n"
                 another_deal
+            elsif input == "quit"
+                goodbye
+                exit
             else
                 puts "Invalid input. Please try again"
             end
@@ -147,6 +158,7 @@ class FindDeals::CLI
                 @category_input = ""
                 prompt_user_city
             elsif input == "n"
+                goodbye
                 exit
             else
                 puts "Invalid input. Please try again"
@@ -159,5 +171,10 @@ class FindDeals::CLI
         puts "type 'quit' at any time to quit"
         puts "===================================================================="
         puts ""
+    end
+
+    def goodbye
+        puts "Okay. Hoping to see you again soon for more deals!"
+        puts "===================================================================="
     end
 end

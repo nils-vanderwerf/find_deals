@@ -7,7 +7,7 @@ class SaveDeals < ActiveRecord::Migration[5.2]
             d.string :title
             d.string :url
             d.string :location
-            d.float :price
+            d.integer :price
             d.integer :promotion
             d.string :about
     end
