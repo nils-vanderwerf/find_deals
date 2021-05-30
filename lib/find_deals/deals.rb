@@ -1,23 +1,25 @@
-class FindDeals::Deal 
-    attr_accessor :title, :location, :url, :price, :promotion, :about
+# require 'active_record'
+class FindDeals::Deal < ActiveRecord::Base
+#     attr_accessor :title, :location, :url, :price, :promotion, :about
 
-    @@all = []
+#     @@all = []
 
-    def initialize (title: nil, url: nil, location: nil, price: "$0", promotion: "0%", about: nil)
-        @@all << self
-        @title = title
-        @location = location
-        @url = url
-        @price = price
-        @promotion = promotion 
-        @about = about
-    end
+#     def initialize (title: nil, url: nil, location: nil, price: "$0", promotion: "0%", about: nil)
+#         @@all << self
+#         @title = title
+#         @location = location
+#         @url = url
+#         @price = price
+#         @promotion = promotion 
+#         @about = about
+#     end
 
-    def self.all
-        @@all
-    end
+#     def self.all
+#         @@all
+#     end
 
     def print
+        puts "Self is: #{self.title}"
         puts "===================================================================="
             puts "#{self.title.upcase}"
             puts "#{self.location}"
@@ -33,6 +35,10 @@ class FindDeals::Deal
         puts "===================================================================="
         puts "BUY NOW AT #{self.url}"
         puts "===================================================================="
+    end
+
+    def create_db_entry
+         self.find_or_create_by(title: title, url: url, location: location, price: price, promotion: promotion, about: about)
     end
 
     def self.reset_all

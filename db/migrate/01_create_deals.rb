@@ -1,6 +1,6 @@
 # db/migrate/01_create_artists.rb
 
-class CreateDeals < ActiveRecord::Migration[5.2]
+class CreateDeals < ActiveRecord::Migration[5.2.6]
 
     def change
         create_table :deals do |d|

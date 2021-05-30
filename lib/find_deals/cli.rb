@@ -1,7 +1,7 @@
 #CLI Controller
 
 class FindDeals::CLI
-    attr_accessor :city_input, :category_input
+    attr_accessor :city_input, :category_input, :scraper
     CITIES = {
         "1" => "sydney",
         "2" => "melbourne",
@@ -56,7 +56,6 @@ class FindDeals::CLI
         input = ""
         input = gets.strip
         @city_input = select_city_from_input(input)
-        puts @city_input
         show_option_to_quit
         if input != "quit"
             prompt_user_category
@@ -84,14 +83,14 @@ class FindDeals::CLI
         input = ""
         input = gets.strip
         @category_input = select_category_from_input(input)
-        site_scraper = FindDeals::Scraper.new(@city_input, @category_input)
+        @site_scraper = FindDeals::Scraper.new(@city_input, @category_input)
         print_deals(@city_input, @category_input)
     end
 
         def print_deals(city, category)
             "Here are some great deals:"
-            FindDeals::Deal.all.each.with_index(1) do |deal, index|
-                puts "#{index}." 
+            FindDeals::Deal.all.each do |deal|
+                puts "#{deal.id}." 
                 puts deal.print
             end
             print_more_info
@@ -112,23 +111,24 @@ class FindDeals::CLI
             input = gets.strip
             number = input.to_i 
             if number != 0 && number <= FindDeals::Deal.all.size && input != "quit" ## to_i converts to 0 if not an integer
-                FindDeals::Deal.all[number - 1].print_about_details
+                FindDeals::Deal.find(number).print_about_details
             elsif input == "quit"
-                exit
+                quit_app
             else 
                 puts "Invalid input. Please try again"
             end
-            save_deal
+            save_deal(FindDeals::Deal.all[number - 1]) #pass seleced deal to be saved
         end
 
-        def save_deal
+        def save_deal(selected_deal)
             puts "Would you like to save this deal. Y or N"
             input = ""
             input = gets.strip.downcase
             while input != "y" || input != "n" || input != "quit"
             if input == "y"
                 puts "Saving deal..."
-                ##save to database
+                FindDeals::Deal.connection
+                selected_deal.create_db_entry
                 puts "Would you like to see your saved deals?"
                 ##show saved deals
             elsif input == "n"
@@ -149,7 +149,7 @@ class FindDeals::CLI
                 @category_input = ""
                 prompt_user_city
             elsif input == "n"
-                exit
+                quit_app
             else
                 puts "Invalid input. Please try again"
             end 
@@ -161,5 +161,10 @@ class FindDeals::CLI
         puts "type 'quit' at any time to quit"
         puts "===================================================================="
         puts ""
+    end
+
+    def quit_app
+        exit
+        puts "Thanks for trying our app. See you next time!"
     end
 end
