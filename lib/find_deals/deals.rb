@@ -3,7 +3,7 @@ class FindDeals::Deal
 
     @@all = []
 
-    def initialize (title: nil, url: nil, location: nil, price: "$0", promotion: "0%", about: nil)
+    def initialize (title: nil, url: nil, location: nil, price: 0, promotion: 0, about: nil)
         @@all << self
         @title = title
         @location = location
@@ -30,7 +30,7 @@ class FindDeals::Deal
         puts "#{self.title.upcase}"
         puts "===================================================================="
         puts "#{self.about}"
-        puts "===================================================================="
+        puts ""
         puts "BUY NOW AT #{self.url}"
         puts "===================================================================="
     end
@@ -39,11 +39,6 @@ class FindDeals::Deal
         # FindDeals::SavedDeals.connection
         FindDeals::SavedDeals.find_or_create_by(title: self.title, location: self.location, url: self.url, price: self.price, promotion: self.promotion, about: self.about)
     end
-
-    def print_all_from_db
-
-    end        
-    
 
     def self.reset_all
         @@all.clear

@@ -1,7 +1,7 @@
 #CLI Controller
 
 class FindDeals::CLI
-    attr_accessor :city_input, :category_input
+    attr_accessor :city_input, :category_input, :deals
     CITIES = {
         "1" => "sydney",
         "2" => "melbourne",
@@ -20,6 +20,10 @@ class FindDeals::CLI
         "7" => "wine",
         "8" => "personalised-gifts"
     }
+
+    def initialize 
+        @deals = FindDeals::SavedDeals.all
+    end
 
     def call
         puts "Welcome to this amazing promo finder!"
@@ -40,7 +44,6 @@ class FindDeals::CLI
             6. Gold Coast
             7. Other?
             DOC
-       
         get_city_input
     end
 
@@ -56,11 +59,8 @@ class FindDeals::CLI
         input = ""
         input = gets.strip
         @city_input = select_city_from_input(input)
-        puts @city_input
         show_option_to_quit
-        if input != "quit"
-            prompt_user_category
-        end
+        input != "quit" ? prompt_user_category : goodbye
     end
 
     def prompt_user_category
@@ -83,9 +83,11 @@ class FindDeals::CLI
     def get_category_input
         input = ""
         input = gets.strip
-        @category_input = select_category_from_input(input)
-        site_scraper = FindDeals::Scraper.new(@city_input, @category_input)
-        print_deals(@city_input, @category_input)
+        if input != 'quit'
+            @category_input = select_category_from_input(input)
+            site_scraper = FindDeals::Scraper.new(@city_input, @category_input)
+            print_deals(@city_input, @category_input)
+        end
     end
 
         def print_deals(city, category)
@@ -107,7 +109,6 @@ class FindDeals::CLI
                 prompt_user_city
             end
            
-            input = ""
             input = gets.strip
             number = input.to_i 
             if number != 0 && number <= FindDeals::Deal.all.size && input != "quit" ## to_i converts to 0 if not an integer
@@ -122,49 +123,103 @@ class FindDeals::CLI
         end
 
         def save_deal(deal)
-            puts "Would you like to save this deal. Y or N"
-            input = ""
+            puts ""
             input = gets.strip.downcase
+            check_input(input, "Would you like to save this deal. Y or N")
             if input == "y"
                 puts "Saving deal..."
                 deal.save
-                puts "Would you like to see your saved deals? Y or N"
-                input = ""
-                input = gets.strip.downcase
-                if input == "y"
-                    FindDeals::SavedDeals.all.each do |d|
-                        puts "#{d.id}." 
-                        puts d.print
-                    end
-                    another_deal
+                show_deals
+                another_deal
+            elsif input == "n"
+                another_deal
+            elsif input == "quit"
+                goodbye
+            else
+            end
+        end
+
+    def check_input (input, prompt)
+        while input != y || input != n || input != 'quit'
+            puts "Invalid input. Please try again"
+            puts ""
+            puts prompt ##e.g "Would you like to see your saved deals? Y or N"
+            input = gets.strip.downcase 
+            binding.pry       
+        end
+    end
+
+    def show_deals
+
+            input = ""
+            input = gets.strip.downcase
+            check_input(input, "Would you like to see your saved deals? Y or N")
+            if input == "y"
+                @deals.all.each.with_index(1) do |deal, index|
+                    puts "#{index}." 
+                    puts deal.print
                 end
             elsif input == "n"
                 another_deal
             elsif input == "quit"
                 goodbye
-                exit
-            else
+            else 
                 puts "Invalid input. Please try again"
             end
-        end
+
+    end
 
     def another_deal
+        puts "===================================================================="
+        puts ""
         puts "Would you like to check out another deal? Y or N"
+        puts "To delete a saved deal type delete"
         input = ""
         input = gets.strip.downcase
-        while input != "y" || input != "n" || input != "quit"
+        while input != y || input != n || input != delete || input == "quit" 
+            puts "Invalid input. Please try again"
+            puts ""
+            puts "Type in the number of the deal you would like to delete" 
+            input = ""
+            input = gets.strip.downcase            
+        end
+
             if input == "y"
                 @city_input = ""
                 @category_input = ""
                 prompt_user_city
-            elsif input == "n"
+            elsif input == "n" || input == "quit"
                 goodbye
-                exit
-            else
+            elsif input == "d"
+                delete_record
+                another_deal
+            else  
                 puts "Invalid input. Please try again"
-            end 
-        end
+            end
+
     end
+
+    def delete_record 
+        input = ""
+        input = gets.strip.downcase
+            while input.to_i != 0 && input.to_i <= FindDeals::SavedDeals.all.size
+            puts "Invalid input. Please try again"
+            puts ""
+            puts "Type in the number of the deal you would like to delete" 
+            input = ""
+            input = gets.strip.downcase
+            
+        end
+        
+        if input.to_i != 0 && input.to_i <= FindDeals::SavedDeals.all.size
+            FindDeals::SavedDeals.all.delete_from_db(input.to_i)
+            show_deals
+            another_deal
+        else 
+            puts "Invalid input. Please try again"
+        end 
+    end
+
     def show_option_to_quit
         puts ""
         puts "===================================================================="
@@ -176,5 +231,6 @@ class FindDeals::CLI
     def goodbye
         puts "Okay. Hoping to see you again soon for more deals!"
         puts "===================================================================="
+        exit
     end
 end
