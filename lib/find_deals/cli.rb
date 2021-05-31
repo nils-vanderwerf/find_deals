@@ -185,7 +185,8 @@ class FindDeals::CLI
         elsif input == "quit"
             goodbye
         else 
-            puts "Invalid input. Please try again"
+            invalid_input
+            show_deals
         end
 
     end
@@ -222,8 +223,8 @@ class FindDeals::CLI
                 another_deal
             else  
                 puts "Invalid input. Please try again"
+                another_deal
             end
-
     end
 
     def delete_record 
@@ -240,7 +241,12 @@ class FindDeals::CLI
             show_deals
             another_deal
         else 
+            puts "--------------------------------------------------------------------"
+            puts ""
             puts "Invalid input. Please try again"
+            puts ""
+            puts "--------------------------------------------------------------------"
+            delete_record
         end 
     end
 
