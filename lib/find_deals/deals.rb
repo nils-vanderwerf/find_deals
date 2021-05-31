@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-class FindDeals::Deal < ActiveRecord::Base
-    attr_accessor :title, :location, :url, :price, :promotion, :about
-=======
 class FindDeals::Deal 
     attr_accessor :title, :location, :url, :price, :promotion, :about, :city_id, :category_id
->>>>>>> user-implementation
 
     @@all = []
 
@@ -45,7 +40,7 @@ class FindDeals::Deal
     def save(user_id)
         # FindDeals::SavedDeals.connection
 
-        FindDeals::SavedDeals.find_or_create_by(
+        SavedDeals.find_or_create_by(
             title: self.title, 
             location: self.location, 
             url: self.url, 

@@ -4,7 +4,6 @@ class FindDeals::CLI
     attr_accessor :city_input, :category_input, :user_name
 
     def initialize 
-        # @deals = FindDeals::SavedDeals.all
         @user_name = ""
     end
 
@@ -196,7 +195,7 @@ class FindDeals::CLI
             @user_name = gets.strip.downcase
             puts ""
             puts "--------------------------------------------------------------------"
-            FindDeals::Users.find_or_create_by(name: @user_name)
+            Users.find_or_create_by(name: @user_name)
         end
     
     def show_deals
@@ -272,8 +271,7 @@ class FindDeals::CLI
         puts ""
         puts "--------------------------------------------------------------------" 
         
-        if input.to_i != 0 && input.to_i <= FindDeals::SavedDeals.all.size
-            FindDeals::SavedDeals.all.delete_from_db(input.to_i)
+        if input.to_i != 0 && input.to_i <= SavedDeals.all.delete_from_db(input.to_i)
             show_deals
             another_deal
         else 
