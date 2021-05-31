@@ -1,17 +1,24 @@
 class FindDeals::Scraper
-
-    attr_accessor :html, :doc, :full_url
+    attr_accessor :html, :doc, :full_url, :city, :category
     attr_reader :base_url
 
     def initialize(city, category)
         @base_url = "https://www.scoopon.com.au"
         @full_url = "#{@base_url}/#{city}/#{category}"
         @html = open(@full_url)
+<<<<<<< HEAD
         @doc = Nokogiri::HTML(@html) #Nokogiri is an API for reading and witing XML and HTML from ruby
+=======
+        @doc = Nokogiri::HTML(@html)
+        @city = city
+        @category = category
+>>>>>>> user-implementation
         make_instances
+
     end
 
     def make_instances
+      
     deal_cards = @doc.css("div.deal-item")
     deal_cards.collect do |deal|
         title = deal.css("h3.deal-title span").text.strip
@@ -23,14 +30,24 @@ class FindDeals::Scraper
             location = 
             "#{deal.css(".deal-subtitle span.specific").text.strip} - #{deal.css(".deal-subtitle span.general").text.strip}"
             
-            price = deal.css('a div.deal-pricing div.price-box div.price-text').text.strip
-            promotion = deal.css('div.deal-saving').text.strip
+            price = deal.css('a div.deal-pricing div.price-box div.price-text').text.strip.gsub("$", "").to_i
+            promotion = deal.css('div.deal-saving span.amount-off').text.strip.gsub("%", "").to_i
             #store the page for that deal instance
             about_info = get_more_info(url)
             about = about_info.css('.styles__Content-sc-14qr04h-6').text.strip
             #Limit to 10 results
-            if FindDeals::Deal.all.length < 10 
-                FindDeals::Deal.new(title: title, url: url, location: location, price: price, promotion: promotion, about: about)
+
+            if FindDeals::Deal.all.length < 10           
+                FindDeals::Deal.new(
+                    title: title, 
+                    url: url, 
+                    location: location, 
+                    price: price, 
+                    promotion: promotion, 
+                    about: about, 
+                    category_id: FindDeals::Categories.select(:id).find_by(name: @category).id,
+                    city_id: FindDeals::Cities.select(:id).find_by(name: @city).id
+                )
             end
         end 
     end
