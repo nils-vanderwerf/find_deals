@@ -1,28 +1,11 @@
 #CLI Controller
 
 class FindDeals::CLI
-    attr_accessor :city_input, :category_input, :deals, @last_input
-    CITIES = {
-        "1" => "sydney",
-        "2" => "melbourne",
-        "3" => "perth",
-        "4" => "brisbane",
-        "5" => "adelaide",
-        "6" => "gold-coast"
-    }
-    CATEGORIES = {
-        "1" => nil,
-        "2" => "dining",
-        "3" => "wellness-beauty",
-        "4" => "activities",
-        "5" => "shopping",
-        "6" => "services",
-        "7" => "wine",
-        "8" => "personalised-gifts"
-    }
+    attr_accessor :city_input, :category_input, :user_name
 
     def initialize 
-        @deals = FindDeals::SavedDeals.all
+        # @deals = FindDeals::SavedDeals.all
+        @user_name = ""
     end
 
     def call
@@ -54,11 +37,17 @@ class FindDeals::CLI
     end
 
     def select_city_from_input(input)
-        CITIES[input.to_s]
+        while input == 0 && input > FindDeals::Cities.all.size
+            invalid_input
+        end
+        FindDeals::Cities.find(input).name ## Collects it from the database
     end
-    
+
     def select_category_from_input(input)
-          CATEGORIES[input.to_s]
+        while input == 0 && input > FindDeals::Categories.all.size
+            invalid_input
+        end
+        FindDeals::Categories.find(input).name
     end
 
     def get_city_input
@@ -143,11 +132,11 @@ class FindDeals::CLI
             puts "Would you like to save this deal? Y or N"
             input = gets.strip.downcase
             if input == "y"
-                get_username
+                user = get_user
                 puts "Saving deal..."
                 puts ""
                 puts "--------------------------------------------------------------------"
-                deal.save
+                deal.save(user.id) ##save to Saved Deals, with the user id as the User_id
                 show_deals
                 another_deal
             elsif input == "n"
@@ -159,25 +148,24 @@ class FindDeals::CLI
                 save_deal(deal)
             end
         end
-    
-        def get_username
-    
-    def invalid_input
-        puts "--------------------------------------------------------------------"
-        puts ""
-        puts "Invalid input. Please try again"
-        puts ""
-        puts "--------------------------------------------------------------------"
-    end
 
-
+        def get_user
+            puts "--------------------------------------------------------------------"
+            puts ""
+            puts "Please enter a username"
+            @user_name = gets.strip.downcase
+            puts ""
+            puts "--------------------------------------------------------------------"
+            FindDeals::Users.find_or_create_by(name: @user_name)
+        end
+    
     def show_deals
         input = ""
         puts "--------------------------------------------------------------------"
         puts ""
         puts "Would you like to see your saved deals? Y or N"
-        
         input = gets.strip.downcase
+        get_user
 
         if input == "y"
             puts ""
@@ -193,6 +181,8 @@ class FindDeals::CLI
         end
 
     end
+
+    
     def show_saved_deals
         puts ""
         puts "--------------------------------------------------------------------"
@@ -200,11 +190,12 @@ class FindDeals::CLI
         puts "YOUR SAVED DEALS"
         puts ""
         puts "--------------------------------------------------------------------"
-        @deals.all.each.with_index(1) do |deal, index|
+        get_user.all.each.with_index(1) do |deal, index|
             puts "#{index}." 
             puts deal.print
         end
     end
+
     def another_deal
         input = ""
         puts "--------------------------------------------------------------------"
@@ -225,10 +216,12 @@ class FindDeals::CLI
                 delete_record
                 another_deal
             else  
-                puts "Invalid input. Please try again"
+                invalid_input
                 another_deal
             end
     end
+
+    
 
     def delete_record 
         input = ""
@@ -251,6 +244,14 @@ class FindDeals::CLI
             puts "--------------------------------------------------------------------"
             delete_record
         end 
+    end
+
+    def invalid_input
+        puts "--------------------------------------------------------------------"
+        puts ""
+        puts "Invalid input. Please try again"
+        puts ""
+        puts "--------------------------------------------------------------------"
     end
 
     def goodbye

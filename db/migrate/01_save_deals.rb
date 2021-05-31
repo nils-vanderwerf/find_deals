@@ -1,5 +1,3 @@
-# db/migrate/01_create_artists.rb
-
 class SaveDeals < ActiveRecord::Migration[5.2]
 
     def change
@@ -10,18 +8,10 @@ class SaveDeals < ActiveRecord::Migration[5.2]
             d.integer :price
             d.integer :promotion
             d.string :about
-            d.integer :user_id
-            d.integer :category_id
-            d.integer :city_id
+        end
+        add_foreign_key :saved_deals, :users
+        add_foreign_key :saved_deals, :categories
+        add_foreign_key :saved_deals, :cities
     end
-
-    def self.up
-        rename_table :deals, :saved_deals
-      end
-    
-      def self.down
-        rename_table :saved_deals, :deals
-      end
-end
 end
 

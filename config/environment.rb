@@ -9,9 +9,8 @@ require "rake"
 require "pry"
 require 'active_record'
 require 'sinatra/activerecord'
-# require 'bundler/setup'
 
-# Bundler.require(:default)
+
 
 require_all "lib" #load up all files in the lib directory and its subdirectories
 

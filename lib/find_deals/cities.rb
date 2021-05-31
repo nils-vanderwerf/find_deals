@@ -1,3 +1,3 @@
 class FindDeals::Cities < ActiveRecord::Base
-    has_many :deals
+    has_many :saved_deals
 end
