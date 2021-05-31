@@ -1,7 +1,7 @@
 #CLI Controller
 
 class FindDeals::CLI
-    attr_accessor :city_input, :category_input, :deals
+    attr_accessor :city_input, :category_input, :deals, @last_input
     CITIES = {
         "1" => "sydney",
         "2" => "melbourne",
@@ -144,6 +144,7 @@ class FindDeals::CLI
             puts "Would you like to save this deal? Y or N"
             input = gets.strip.downcase
             if input == "y"
+                get_username
                 puts "Saving deal..."
                 puts ""
                 puts "--------------------------------------------------------------------"
@@ -159,6 +160,8 @@ class FindDeals::CLI
                 save_deal(deal)
             end
         end
+    
+        def get_username
     
     def invalid_input
         puts "--------------------------------------------------------------------"

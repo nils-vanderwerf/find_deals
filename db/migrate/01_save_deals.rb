@@ -10,6 +10,9 @@ class SaveDeals < ActiveRecord::Migration[5.2]
             d.integer :price
             d.integer :promotion
             d.string :about
+            d.integer :user_id
+            d.integer :category_id
+            d.integer :city_id
     end
 
     def self.up

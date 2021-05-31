@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
 
 require_relative '../config/environment'
+
+ActiveRecord::Migration.check_pending!
 FindDeals::CLI.new.call
