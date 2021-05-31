@@ -48,7 +48,6 @@ class FindDeals::CLI
             4. Brisbane
             5. Adelaide
             6. Gold Coast
-            7. Other?
             DOC
         get_city_input
         puts ""
