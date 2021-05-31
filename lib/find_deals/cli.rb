@@ -26,7 +26,10 @@ class FindDeals::CLI
     end
 
     def call
+        puts "--------------------------------------------------------------------"
+        puts ""
         puts "Welcome to this amazing promo finder!"
+        puts ""
         @city_input = ""
         @category_input = ""
         prompt_user_city
@@ -34,7 +37,10 @@ class FindDeals::CLI
     end
 
     def prompt_user_city
-        puts "Which city hoping to find deals in ?"
+        puts "--------------------------------------------------------------------"
+        puts ""
+        puts "Which city hoping to find deals in?"
+        puts ""
         puts <<-DOC
             1. Sydney
             2. Melbourne
@@ -45,6 +51,7 @@ class FindDeals::CLI
             7. Other?
             DOC
         get_city_input
+        puts ""
     end
 
     def select_city_from_input(input)
@@ -59,11 +66,11 @@ class FindDeals::CLI
         input = ""
         input = gets.strip
         @city_input = select_city_from_input(input)
-        show_option_to_quit
         input != "quit" ? prompt_user_category : goodbye
     end
 
     def prompt_user_category
+        puts "----------------------------------------------------------------"
         puts ""
         puts "Which category are you hoping to find deals in ?"
         puts "Type quit to exit the program"
@@ -78,6 +85,7 @@ class FindDeals::CLI
         8. Personalised Gifts
         DOC
         get_category_input
+        puts ""
     end
 
     def get_category_input
@@ -91,6 +99,10 @@ class FindDeals::CLI
     end
 
         def print_deals(city, category)
+            puts "----------------------------------------------------------------"
+            puts ""
+            puts "DEALS FOR THIS INPUT"
+            puts ""
             FindDeals::Deal.all.each.with_index(1) do |deal, index|
                 puts "#{index}." 
                 puts deal.print
@@ -99,17 +111,21 @@ class FindDeals::CLI
         end
     
         def print_more_info
+            
             if FindDeals::Deal.all.length != 0
+                puts "--------------------------------------------------------------------"
+                puts ""
                 puts "Please enter the number of the deal you'd like to see more about. Type in quit to exit"
+                input = gets.strip
+                puts ""
             else
-                puts "Sorry! No deals for this section. Please try another selection."
+                puts "Sorry! No deals for this section today. Please try another selection."
                 puts ""
-                puts "===================================================================="
-                puts ""
+                puts "--------------------------------------------------------------------"
                 prompt_user_city
             end
            
-            input = gets.strip
+            
             number = input.to_i 
             if number != 0 && number <= FindDeals::Deal.all.size && input != "quit" ## to_i converts to 0 if not an integer
                 FindDeals::Deal.all[number - 1].print_about_details
@@ -117,17 +133,20 @@ class FindDeals::CLI
                 goodbye
                 exit
             else 
-                puts "Invalid input. Please try again"
+                invalid_input
             end
             save_deal(FindDeals::Deal.all[number - 1])
         end
 
         def save_deal(deal)
             input = ""
+            puts ""
             puts "Would you like to save this deal? Y or N"
             input = gets.strip.downcase
             if input == "y"
                 puts "Saving deal..."
+                puts ""
+                puts "--------------------------------------------------------------------"
                 deal.save
                 show_deals
                 another_deal
@@ -136,22 +155,32 @@ class FindDeals::CLI
             elsif input == "quit"
                 goodbye
             else
-                puts "Invalid input. Please try again"
+                invalid_input
                 save_deal(deal)
             end
         end
+    
+    def invalid_input
+        puts "--------------------------------------------------------------------"
+        puts ""
+        puts "Invalid input. Please try again"
+        puts ""
+        puts "--------------------------------------------------------------------"
+    end
 
 
     def show_deals
         input = ""
+        puts "--------------------------------------------------------------------"
+        puts ""
         puts "Would you like to see your saved deals? Y or N"
+        
         input = gets.strip.downcase
 
         if input == "y"
-            @deals.all.each.with_index(1) do |deal, index|
-                puts "#{index}." 
-                puts deal.print
-            end
+            puts ""
+            puts "--------------------------------------------------------------------"
+            show_saved_deals
         elsif input == "n"
             another_deal
         elsif input == "quit"
@@ -161,16 +190,29 @@ class FindDeals::CLI
         end
 
     end
-
-    def another_deal
-        puts "===================================================================="
+    def show_saved_deals
         puts ""
+        puts "--------------------------------------------------------------------"
+        puts ""
+        puts "YOUR SAVED DEALS"
+        puts ""
+        puts "--------------------------------------------------------------------"
+        @deals.all.each.with_index(1) do |deal, index|
+            puts "#{index}." 
+            puts deal.print
+        end
+    end
+    def another_deal
         input = ""
+        puts "--------------------------------------------------------------------"
+        puts ""
         puts "Would you like to check out another deal? Y or N"
         puts "To delete a saved deal type D"
         input = gets.strip.downcase
 
             if input == "y"
+                puts ""
+                puts "--------------------------------------------------------------------"
                 @city_input = ""
                 @category_input = ""
                 prompt_user_city
@@ -186,11 +228,13 @@ class FindDeals::CLI
     end
 
     def delete_record 
-        puts "===================================================================="
-        puts ""
         input = ""
-        puts "Type in the number of the deal you would like to delete" 
+        puts "--------------------------------------------------------------------"
+        puts ""
+        puts "Type in the number of the deal you would like to delete"
         input = gets.strip.downcase
+        puts ""
+        puts "--------------------------------------------------------------------" 
         
         if input.to_i != 0 && input.to_i <= FindDeals::SavedDeals.all.size
             FindDeals::SavedDeals.all.delete_from_db(input.to_i)
@@ -201,17 +245,12 @@ class FindDeals::CLI
         end 
     end
 
-    def show_option_to_quit
-        puts ""
-        puts "===================================================================="
-        puts "type 'quit' at any time to quit"
-        puts "===================================================================="
-        puts ""
-    end
-
     def goodbye
-        puts "Okay. Hoping to see you again soon for more deals!"
-        puts "===================================================================="
+        puts "--------------------------------------------------------------------"
+        puts ""
+        puts "Hope to see you again soon for more deals!"
+        puts ""
+        puts "--------------------------------------------------------------------"
         exit
     end
 end
