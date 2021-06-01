@@ -15,8 +15,9 @@ class FindDeals::CLI
         puts ""
         puts "Welcome to this amazing promo finder!"
         puts ""
-        while @input != "quit"
+        # while @input != "quit"
             #-----LIST OF METHODS---#
+        if @input != "quit"
             prompt_user_city
             prompt_user_category
             print_deals
@@ -24,8 +25,10 @@ class FindDeals::CLI
             prompt_to_save_deal
             prompt_to_show_saved_deals
             next_steps
+        # end
+        else 
+            goodbye #quit program
         end
-        goodbye #quit program
     end
 
     def prompt_user_city
@@ -48,7 +51,7 @@ class FindDeals::CLI
 
     def get_city_input
         @input = gets.strip
-        @city_input = select_city_from_input(@input)
+        @input != 'quit' ? @city_input = select_city_from_input(@input) : goodbye
     end
 
     def select_city_from_input(input)
@@ -93,20 +96,34 @@ class FindDeals::CLI
 
     def get_category_input
         @input = gets.strip
-        @category_input = select_category_from_input(input)
+        # @category_input = select_category_from_input(input)
+        if @input.to_i == 0 || @input.to_i > Categories.all.length
+            invalid_input
+            get_category_input
+        elsif @input == 'quit'
+            goodbye
+        end  
+        elsif FindDeals::Deal.all.length == 0
+            puts "--------------------------------------------------------------------"
+            puts ""
+            puts "Sorry! No deals for this selection today. Please try another selection."
+            puts ""
+            puts "--------------------------------------------------------------------"
+        end
+        @category_input = Categories.find(input).name
         site_scraper = FindDeals::Scraper.new(@city_input, @category_input)
     end
 
-        def print_deals
-            puts "----------------------------------------------------------------"
-            puts ""
-            puts "DEALS FOR THIS INPUT"
-            puts ""
-            FindDeals::Deal.all.each.with_index(1) do |deal, index|
-                puts "#{index}." 
-                puts deal.print
-            end
+    def print_deals
+        puts "----------------------------------------------------------------"
+        puts ""
+        puts "DEALS FOR THIS INPUT"
+        puts ""
+        FindDeals::Deal.all.each.with_index(1) do |deal, index|
+            puts "#{index}." 
+            puts deal.print
         end
+    end
     
         def print_more_info
             
@@ -114,28 +131,21 @@ class FindDeals::CLI
                 puts "--------------------------------------------------------------------"
                 puts ""
                 puts "Please enter the number of the deal you'd like to see more about. Type in quit to exit"
-                
-
                 puts ""
-                while input.to_s == 0
-                    @input = gets.strip
+                @input = gets.strip.to_i
+                while @input == 0 || @input > FindDeals::Deal.all.size
                     invalid_input
+                    @input = gets.strip.to_i
                 end
+                FindDeals::Deal.all[@input - 1].print_about_details
+                @selected_deal = FindDeals::Deal.all[@input - 1]
             else
-                puts "Sorry! No deals for this section today. Please try another selection."
+                puts "--------------------------------------------------------------------"
+                puts ""
+                puts "Sorry! No deals for this selection today. Please try another selection."
                 puts ""
                 puts "--------------------------------------------------------------------"
-                prompt_user_city
             end
-           
-            
-            number = @input.to_i 
-            if number != 0 && number <= FindDeals::Deal.all.size && input != "quit" ## to_i converts to 0 if not an integer
-                FindDeals::Deal.all[number - 1].print_about_details
-            else 
-                invalid_input
-            end
-            @selected_deal = FindDeals::Deal.all[number - 1]
         end
 
         def prompt_to_save_deal
@@ -230,7 +240,7 @@ class FindDeals::CLI
         puts ""
         puts "--------------------------------------------------------------------"
         puts ""
-        puts "YOUR SAVED DEALS IN THE #{category_input == 'anything' ? 'ALL DEALS' : category_input.upcase.split('-').join(' ')} CATEGORY"
+        puts "YOUR SAVED DEALS IN THE #{@category_input == nil ? 'ALL DEALS' : @category_input.upcase.split('-').join(' ')} CATEGORY"
         puts ""
         puts "--------------------------------------------------------------------"
         #get id of selected_user
@@ -261,20 +271,18 @@ class FindDeals::CLI
             if @input == "more"
                 puts ""
                 puts "--------------------------------------------------------------------"
-                @city_input = ""
-                @category_input = ""
+                # @city_input = ""
+                # @category_input = ""
                 prompt_user_city
             elsif @input == 'city'
                 puts ""
                 puts "--------------------------------------------------------------------"
-                @city_input = ""
-                @category_input = ""
+                # @city_input = ""
+                # @category_input = ""
                 prompt_user_city
                 filter_by_city
                 next_steps
             elsif @input == 'category'
-                @city_input = ""
-                @category_input = ""
                 prompt_user_category
                 filter_by_category
                 next_steps
@@ -302,12 +310,8 @@ class FindDeals::CLI
             prompt_to_show_saved_deals
             next_steps
         else 
-            puts "--------------------------------------------------------------------"
-            puts ""
-            puts "Invalid input. Please try again"
-            puts ""
-            puts "--------------------------------------------------------------------"
-            delete_record
+           invalid_input
+           delete_record
         end 
     end
 
