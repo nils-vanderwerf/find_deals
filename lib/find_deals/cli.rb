@@ -18,14 +18,12 @@ class FindDeals::CLI
         while @input != "quit"
             #-----LIST OF METHODS---#
             prompt_user_city
-            get_city_input
             prompt_user_category
-            get_category_input
             print_deals
             print_more_info
             prompt_to_save_deal
             prompt_to_show_saved_deals
-            select_another_deal
+            next_steps
         end
         goodbye #quit program
     end
@@ -33,7 +31,7 @@ class FindDeals::CLI
     def prompt_user_city
         puts "--------------------------------------------------------------------"
         puts ""
-        puts "Which city hoping to find deals in?"
+        puts "Select a city (type in corresponding number)"
         puts ""
         puts <<-DOC
             1. Sydney
@@ -45,6 +43,7 @@ class FindDeals::CLI
             DOC
         
         puts ""
+        get_city_input
     end
 
     def get_city_input
@@ -53,17 +52,22 @@ class FindDeals::CLI
     end
 
     def select_city_from_input(input)
-        while input.to_s == 0 && input > Cities.all.size
+        while input.to_i == 0 || input.to_i > Cities.all.size
+            input = ""
             invalid_input
+            prompt_user_city
+            @input = gets.strip
+            
         end
-        Cities.find(input).name ## Collects it from the database
+            Cities.find(input).name ## Collects it from the databasekm 
     end
 
     def select_category_from_input(input)
-        while input.to_s == 0 && input > Categories.all.size
+        while input.to_i == 0 || input.to_i > Categories.all.size
             invalid_input
+            prompt_user_category
         end
-       Categories.find(input).name
+            Categories.find(input).name
     end
 
   
@@ -71,7 +75,7 @@ class FindDeals::CLI
     def prompt_user_category
         puts "----------------------------------------------------------------"
         puts ""
-        puts "Which category are you hoping to find deals in ?"
+        puts "Select a category (type in corresponding number)"
         puts "Type quit to exit the program"
         puts <<-DOC
         1. Anything
@@ -84,6 +88,7 @@ class FindDeals::CLI
         8. Personalised Gifts
         DOC
         puts ""
+        get_category_input
     end
 
     def get_category_input
@@ -137,6 +142,8 @@ class FindDeals::CLI
             puts ""
             puts "Would you like to save this deal? Y or N"
             @input = gets.strip.downcase
+            puts ""
+            puts "--------------------------------------------------------------------"
             if @input == "y"
                 user = get_user
                 puts "Saving deal..."
@@ -164,7 +171,6 @@ class FindDeals::CLI
     end
     
     def prompt_to_show_saved_deals
-        puts "--------------------------------------------------------------------"
         puts ""
         puts "Would you like to see your saved deals? Y or N"
         
@@ -175,7 +181,7 @@ class FindDeals::CLI
         if @input == "y"
             show_saved_deals
         elsif @input == "n"
-            select_another_deal
+            next_steps
         else 
             invalid_input
             prompt_to_show_saved_deals
@@ -200,31 +206,88 @@ class FindDeals::CLI
         end
     end
 
-    def select_another_deal
+    def filter_by_city
+        puts ""
         puts "--------------------------------------------------------------------"
         puts ""
-        puts "Would you like to check out another deal? Y or N"
-        puts "To delete a saved deal type D"
+        puts "YOUR SAVED DEALS IN #{city_input.upcase.split('-').join(' ')}"
+        puts ""
+        puts "--------------------------------------------------------------------"
+        #get id of selected_user
+        user = Users.find_by(name: @user_name)
+        deals_from_city = SavedDeals.select {|deal| deal.user_id == user.id && deal.city_id == @input.to_i}
+        if deals_from_city.length == 0 
+            puts "Sorry! No saved deals for this section. Please try another selection."
+            next_steps
+        end
+        deals_from_city.each.with_index(1) do |deal, index|
+            puts "#{index}." 
+            puts deal.print
+        end
+    end
+
+    def filter_by_category
+        puts ""
+        puts "--------------------------------------------------------------------"
+        puts ""
+        puts "YOUR SAVED DEALS IN THE #{category_input == 'anything' ? 'ALL DEALS' : category_input.upcase.split('-').join(' ')} CATEGORY"
+        puts ""
+        puts "--------------------------------------------------------------------"
+        #get id of selected_user
+        user = Users.find_by(name: @user_name)
+        deals_from_category = SavedDeals.select {|deal| deal.user_id == user.id && deal.category_id == @input.to_i}
+        if deals_from_category.length == 0 
+            puts "Sorry! No saved deals for this section. Please try another selection."
+            next_steps
+        end
+        deals_from_category.each.with_index(1) do |deal, index|
+            puts "#{index}." 
+            puts deal.print
+        end
+    
+    end
+
+    def next_steps
+        puts "--------------------------------------------------------------------"
+        puts ""
+        puts "What would you like to do now"
+        puts "- To view more deals, type 'MORE'"
+        puts "- To filter your saved deals by city, type in 'CITY'"
+        puts "- To filter your saved deals by category, type in 'CATEGORY'"
+        puts "- To delete a saved deal type 'DELETE"
+        puts "- To quit, type in quit"
         @input = gets.strip.downcase
 
-            if @input == "y"
+            if @input == "more"
                 puts ""
                 puts "--------------------------------------------------------------------"
                 @city_input = ""
                 @category_input = ""
                 prompt_user_city
-            elsif @input == "n" || @input == "quit"
+            elsif @input == 'city'
+                puts ""
+                puts "--------------------------------------------------------------------"
+                @city_input = ""
+                @category_input = ""
+                prompt_user_city
+                filter_by_city
+                next_steps
+            elsif @input == 'category'
+                @city_input = ""
+                @category_input = ""
+                prompt_user_category
+                filter_by_category
+                next_steps
+            elsif @input == "quit"
                 goodbye
-            elsif @input == "d"
+            elsif @input == "delete"
                 delete_record
-                select_another_deal
+                next_steps
             else  
                 invalid_input
-                select_another_deal
+                next_steps
             end
     end
-
-    
 
     def delete_record 
         puts "--------------------------------------------------------------------"
@@ -237,7 +300,7 @@ class FindDeals::CLI
         if @input.to_i != 0 && @input.to_i <= SavedDeals.all.size
             SavedDeals.all.delete_from_db(input.to_i)
             prompt_to_show_saved_deals
-            select_another_deal
+            next_steps
         else 
             puts "--------------------------------------------------------------------"
             puts ""
