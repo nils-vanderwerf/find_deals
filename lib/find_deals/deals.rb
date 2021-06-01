@@ -38,8 +38,6 @@ class FindDeals::Deal
     end
 
     def save(user_id)
-        # FindDeals::SavedDeals.connection
-
         SavedDeals.find_or_create_by(
             title: self.title, 
             location: self.location, 
@@ -51,6 +49,7 @@ class FindDeals::Deal
             city_id: self.city_id,
             user_id: user_id
         )
+       
     end
 
     def self.reset_all

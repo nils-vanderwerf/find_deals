@@ -4,4 +4,5 @@ class Cities < ActiveRecord::Migration[5.2]
             c.string :name
         end
     end
+    
 end

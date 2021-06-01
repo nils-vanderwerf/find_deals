@@ -1,10 +1,13 @@
-#CLI Controller
-
 class FindDeals::CLI
-    attr_accessor :city_input, :category_input, :user_name
+    attr_accessor :city_input, :category_input, :input, :user_name, :selected_deal
 
     def initialize 
+        # @deals = FindDeals::SavedDeals.all
         @user_name = ""
+        @input = ""
+        @city_input = ""
+        @category_input = ""
+        @selected_deal
     end
 
     def call
@@ -12,10 +15,19 @@ class FindDeals::CLI
         puts ""
         puts "Welcome to this amazing promo finder!"
         puts ""
-        @city_input = ""
-        @category_input = ""
-        prompt_user_city
-        goodbye
+        while @input != "quit"
+            #-----LIST OF METHODS---#
+            prompt_user_city
+            get_city_input
+            prompt_user_category
+            get_category_input
+            print_deals
+            print_more_info
+            prompt_to_save_deal
+            prompt_to_show_saved_deals
+            select_another_deal
+        end
+        goodbye #quit program
     end
 
     def prompt_user_city
@@ -31,30 +43,30 @@ class FindDeals::CLI
             5. Adelaide
             6. Gold Coast
             DOC
-        get_city_input
+        
         puts ""
     end
 
+    def get_city_input
+        @input = gets.strip
+        @city_input = select_city_from_input(@input)
+    end
+
     def select_city_from_input(input)
-        while input == 0 && input > FindDeals::Cities.all.size
+        while input.to_s == 0 && input > Cities.all.size
             invalid_input
         end
-        FindDeals::Cities.find(input).name ## Collects it from the database
+        Cities.find(input).name ## Collects it from the database
     end
 
     def select_category_from_input(input)
-        while input == 0 && input > FindDeals::Categories.all.size
+        while input.to_s == 0 && input > Categories.all.size
             invalid_input
         end
-        FindDeals::Categories.find(input).name
+       Categories.find(input).name
     end
 
-    def get_city_input
-        input = ""
-        input = gets.strip
-        @city_input = select_city_from_input(input)
-        input != "quit" ? prompt_user_category : goodbye
-    end
+  
 
     def prompt_user_category
         puts "----------------------------------------------------------------"
@@ -71,21 +83,16 @@ class FindDeals::CLI
         7. Wine
         8. Personalised Gifts
         DOC
-        get_category_input
         puts ""
     end
 
     def get_category_input
-        input = ""
-        input = gets.strip
-        if input != 'quit'
-            @category_input = select_category_from_input(input)
-            site_scraper = FindDeals::Scraper.new(@city_input, @category_input)
-            print_deals(@city_input, @category_input)
-        end
+        @input = gets.strip
+        @category_input = select_category_from_input(input)
+        site_scraper = FindDeals::Scraper.new(@city_input, @category_input)
     end
 
-        def print_deals(city, category)
+        def print_deals
             puts "----------------------------------------------------------------"
             puts ""
             puts "DEALS FOR THIS INPUT"
@@ -94,7 +101,6 @@ class FindDeals::CLI
                 puts "#{index}." 
                 puts deal.print
             end
-            print_more_info
         end
     
         def print_more_info
@@ -103,8 +109,13 @@ class FindDeals::CLI
                 puts "--------------------------------------------------------------------"
                 puts ""
                 puts "Please enter the number of the deal you'd like to see more about. Type in quit to exit"
-                input = gets.strip
+                
+
                 puts ""
+                while input.to_s == 0
+                    @input = gets.strip
+                    invalid_input
+                end
             else
                 puts "Sorry! No deals for this section today. Please try another selection."
                 puts ""
@@ -113,110 +124,61 @@ class FindDeals::CLI
             end
            
             
-            number = input.to_i 
+            number = @input.to_i 
             if number != 0 && number <= FindDeals::Deal.all.size && input != "quit" ## to_i converts to 0 if not an integer
                 FindDeals::Deal.all[number - 1].print_about_details
-            elsif input == "quit"
-                goodbye
-                exit
             else 
                 invalid_input
             end
-<<<<<<< HEAD
-            save_deal
+            @selected_deal = FindDeals::Deal.all[number - 1]
         end
 
-        def save_deal
-            puts "Would you like to save this deal. Y or N"
-            input = ""
-            input = gets.strip.downcase
-            while input != "y" || input != "n" || input != "quit"
-            if input == "y"
-                puts "Saving deal..."
-                ##save to database
-                puts "Would you like to see your saved deals?"
-                ##show saved deals
-            elsif input == "n"
-                another_deal
-            else
-                puts "Invalid input. Please try again"
-            end 
-            end
-        end
-
-    def another_deal
-        puts "Would you like to check out another deal? Y or N"
-        input = ""
-        input = gets.strip.downcase
-        while input != "y" || input != "n" || input != "quit"
-            if input == "y"
-                @city_input = ""
-                @category_input = ""
-                prompt_user_city
-            elsif input == "n"
-                exit
-            else
-                puts "Invalid input. Please try again"
-            end 
-        end
-    end
-    def show_option_to_quit
-=======
-            save_deal(FindDeals::Deal.all[number - 1])
-        end
-
-        def save_deal(deal)
-            input = ""
+        def prompt_to_save_deal
             puts ""
             puts "Would you like to save this deal? Y or N"
-            input = gets.strip.downcase
-            if input == "y"
+            @input = gets.strip.downcase
+            if @input == "y"
                 user = get_user
                 puts "Saving deal..."
                 puts ""
                 puts "--------------------------------------------------------------------"
-                deal.save(user.id) ##save to Saved Deals, with the user id as the User_id
-                show_deals
-                another_deal
-            elsif input == "n"
-                another_deal
-            elsif input == "quit"
-                goodbye
+                
+                @selected_deal.save(user.id) ##save to Saved Deals, with the user id as the User_id
+            elsif @input == "n"
+                
             else
                 invalid_input
-                save_deal(deal)
+                prompt_to_save_deal
             end
         end
 
-        def get_user
-            puts "--------------------------------------------------------------------"
-            puts ""
-            puts "Please enter a username"
-            @user_name = gets.strip.downcase
-            puts ""
-            puts "--------------------------------------------------------------------"
-            Users.find_or_create_by(name: @user_name)
-        end
+    def get_user
+        puts "--------------------------------------------------------------------"
+        puts ""
+        puts "We need to be able to associate this deal with you."
+        puts "Please enter a username"
+        @user_name = gets.strip
+        puts ""
+        puts "--------------------------------------------------------------------"
+        Users.find_or_create_by(name: @user_name)
+    end
     
-    def show_deals
-        input = ""
+    def prompt_to_show_saved_deals
         puts "--------------------------------------------------------------------"
         puts ""
         puts "Would you like to see your saved deals? Y or N"
-        input = gets.strip.downcase
-        get_user
+        
+        @input = gets.strip.downcase
+        puts ""
+        puts "--------------------------------------------------------------------"
 
-        if input == "y"
-            puts ""
-            puts "--------------------------------------------------------------------"
+        if @input == "y"
             show_saved_deals
-        elsif input == "n"
-            another_deal
-        elsif input == "quit"
-            goodbye
+        elsif @input == "n"
+            select_another_deal
         else 
             invalid_input
-            show_deals
+            prompt_to_show_saved_deals
         end
 
     end
@@ -229,51 +191,53 @@ class FindDeals::CLI
         puts "YOUR SAVED DEALS"
         puts ""
         puts "--------------------------------------------------------------------"
-        get_user.all.each.with_index(1) do |deal, index|
+        #get id of selected_user
+        user = Users.find_by(name: @user_name)
+        deals_from_user = SavedDeals.select {|deal| deal.user_id == user.id}
+        deals_from_user.each.with_index(1) do |deal, index|
             puts "#{index}." 
             puts deal.print
         end
     end
 
-    def another_deal
-        input = ""
+    def select_another_deal
         puts "--------------------------------------------------------------------"
         puts ""
         puts "Would you like to check out another deal? Y or N"
         puts "To delete a saved deal type D"
-        input = gets.strip.downcase
+        @input = gets.strip.downcase
 
-            if input == "y"
+            if @input == "y"
                 puts ""
                 puts "--------------------------------------------------------------------"
                 @city_input = ""
                 @category_input = ""
                 prompt_user_city
-            elsif input == "n" || input == "quit"
+            elsif @input == "n" || @input == "quit"
                 goodbye
-            elsif input == "d"
+            elsif @input == "d"
                 delete_record
-                another_deal
+                select_another_deal
             else  
                 invalid_input
-                another_deal
+                select_another_deal
             end
     end
 
     
 
     def delete_record 
-        input = ""
         puts "--------------------------------------------------------------------"
         puts ""
         puts "Type in the number of the deal you would like to delete"
-        input = gets.strip.downcase
+        @input = gets.strip.downcase
         puts ""
         puts "--------------------------------------------------------------------" 
         
-        if input.to_i != 0 && input.to_i <= SavedDeals.all.delete_from_db(input.to_i)
-            show_deals
-            another_deal
+        if @input.to_i != 0 && @input.to_i <= SavedDeals.all.size
+            SavedDeals.all.delete_from_db(input.to_i)
+            prompt_to_show_saved_deals
+            select_another_deal
         else 
             puts "--------------------------------------------------------------------"
             puts ""
@@ -294,7 +258,6 @@ class FindDeals::CLI
 
     def goodbye
         puts "--------------------------------------------------------------------"
->>>>>>> user-implementation
         puts ""
         puts "Hope to see you again soon for more deals!"
         puts ""

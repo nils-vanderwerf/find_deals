@@ -6,13 +6,9 @@ class FindDeals::Scraper
         @base_url = "https://www.scoopon.com.au"
         @full_url = "#{@base_url}/#{city}/#{category}"
         @html = open(@full_url)
-<<<<<<< HEAD
-        @doc = Nokogiri::HTML(@html) #Nokogiri is an API for reading and witing XML and HTML from ruby
-=======
         @doc = Nokogiri::HTML(@html)
         @city = city
         @category = category
->>>>>>> user-implementation
         make_instances
 
     end
@@ -45,8 +41,8 @@ class FindDeals::Scraper
                     price: price, 
                     promotion: promotion, 
                     about: about, 
-                    category_id: FindDeals::Categories.select(:id).find_by(name: @category).id,
-                    city_id: FindDeals::Cities.select(:id).find_by(name: @city).id
+                    category_id: Categories.select(:id).find_by(name: @category).id,
+                    city_id: Cities.select(:id).find_by(name: @city).id
                 )
             end
         end 

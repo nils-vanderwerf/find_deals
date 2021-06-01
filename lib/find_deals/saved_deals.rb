@@ -1,4 +1,7 @@
 class SavedDeals < ActiveRecord::Base
+    belongs_to :users
+    belongs_to :categories
+    belongs_to :cities
     def print
         puts "===================================================================="
             puts "#{self.title.upcase}"
