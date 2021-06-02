@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ["n.vanderw.92@gmail.com"]
 
   spec.summary = "A Web scraper for Scoopon to find deals and promotions"
-  spec.description = "Based on the users city and  category input, they scrape a list of deals from Scoopon.com. They have they chhoice to save to the database and view their saved deals."
+  spec.description = "Based on the users city and category input, they scrape a list of deals from Scoopon.com. They have they choice to save to the database and view their saved deals."
   spec.homepage = "https://github.com/nils-vanderwerf/find_deals/"
   spec.license = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
