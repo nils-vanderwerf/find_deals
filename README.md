@@ -1,8 +1,6 @@
 # FindDeals
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/find_deals`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Welcome to your this awesome find deals gem, whicgh scrapes https://www.scoopon.com.au/ and finds the best deals in a specific area, from a specific category.
 
 ## Installation
 
@@ -22,17 +20,30 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+1. Type in the number of the Australian city you're interested in viewing.
+2. Type in the category you're interested in viewing (some combinations are unavailable - unfortunately there are no deals for a selection).
+3. It will come up with a list of deals with their title, location, price and discount.
+4. Type in a number you want to see more about
+5. It will give a short description of the selected deal.
+6. Specify Y or N (Yes or No) about whether you want to save the current deal.
+7. If yes, it will need a username to associate the deal with the user.
+8. If you click Y for Yes in the next step, it will print your saved deals.
+9. You are now presented with options - 
+    - you can type it 'more' to see more deals (it is case insensitive)
+    - you can type it 'city' to see your saved deals by city
+    - you can type it 'categories' to your saved deals by category
+    -  you can type it 'delete' to delete one of your saved deals
+10. It will then loop around to the appropriate function.
+
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
+After checking out the repo, run `bin/setup` to install dependencies, which includes the database migrations.
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/find_deals. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/find_deals/blob/master/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/nils-vanderwerf/find_deals. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/nils_vanderwerf/find_deals/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    find_deals (0.1.0)
+    find_deals (0.1.1)
       activerecord
       nokogiri
       require_all
@@ -39,7 +39,7 @@ GEM
     minitest (5.14.4)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
-    nokogiri (1.11.5-x86_64-darwin)
+    nokogiri (1.11.6-x86_64-darwin)
       racc (~> 1.4)
     parallel (1.20.1)
     parser (3.0.1.1)
