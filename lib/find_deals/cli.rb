@@ -62,7 +62,7 @@ class FindDeals::CLI
             invalid_input
             prompt_user_city
         end
-            Cities.find(@input).name ## Collects it from the database 
+            Cities.find(@input).name # Collects it from the database 
     end
 
     def select_category_from_input

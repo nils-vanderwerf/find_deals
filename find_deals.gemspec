@@ -3,14 +3,14 @@
 require_relative "lib/find_deals/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "find_deals"
-  spec.version       = FindDeals::VERSION
-  spec.authors       = ["nils-vanderwerf"]
-  spec.email         = ["n.vanderw.92@gmail.com"]
+  spec.name = "find_deals"
+  spec.version = FindDeals::VERSION
+  spec.authors = ["nils-vanderwerf"]
+  spec.email = ["n.vanderw.92@gmail.com"]
 
-  spec.summary       = "A Web scraper for Scoopon to find deals and promotions"
-  spec.homepage      = "https://github.com/nils-vanderwerf/find_deals/"
-  spec.license       = "MIT"
+  spec.summary = "A Web scraper for Scoopon to find deals and promotions"
+  spec.homepage = "https://github.com/nils-vanderwerf/find_deals/"
+  spec.license = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.4.0")
 
   spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
