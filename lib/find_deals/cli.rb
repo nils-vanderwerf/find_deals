@@ -328,7 +328,7 @@ class FindDeals::CLI
             end
         end 
 
-        SavedDeals.all.delete_from_db(@input.to_i)
+        SavedDeals.all.delete_from_db(user, @input.to_i)
         prompt_to_show_saved_deals
         next_steps
 

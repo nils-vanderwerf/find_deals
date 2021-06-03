@@ -15,8 +15,9 @@ class SavedDeals < ActiveRecord::Base
         puts "===================================================================="
     end
 
-    def self.delete_from_db(user_input)
-        title_to_delete = self.all[user_input-1].title
-        self.where(title: title_to_delete).destroy_all
+    def self.delete_from_db(user, user_input)
+        selected_user_deals = SavedDeals.select {|deal| deal.user_id == user.id}
+        title_to_delete = selected_user_deals[user_input-1].title
+        SavedDeals.where(title: title_to_delete).destroy_all
     end
 end
