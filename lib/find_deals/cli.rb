@@ -160,7 +160,7 @@ class FindDeals::CLI
             print_deals_per_page
 
         elsif @input == "cont"
-            print_more_info
+            continue
         else
             invalid_input
             print_deals_per_page
