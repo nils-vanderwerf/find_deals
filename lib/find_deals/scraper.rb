@@ -33,7 +33,7 @@ class FindDeals::Scraper
             about = about_info.css('.styles__Content-sc-14qr04h-6').text.strip
             #Limit to 10 results
 
-            if FindDeals::Deal.all.length < 10           
+            # if FindDeals::Deal.all.length < 10           
                 FindDeals::Deal.new(
                     title: title, 
                     url: url, 
@@ -44,7 +44,7 @@ class FindDeals::Scraper
                     category_id: Categories.select(:id).find_by(name: @category).id,
                     city_id: Cities.select(:id).find_by(name: @city).id
                 )
-            end
+            # end
         end 
     end
     # binding.pry

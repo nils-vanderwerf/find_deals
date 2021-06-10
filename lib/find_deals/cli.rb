@@ -2,6 +2,7 @@
 class FindDeals::CLI
     attr_accessor :city_input, :category_input, :input, :user_name, :selected_deal
 
+
     def initialize 
         # @deals = FindDeals::SavedDeals.all
         @user_name = ""
@@ -9,6 +10,8 @@ class FindDeals::CLI
         @city_input = ""
         @category_input = ""
         @selected_deal
+        @page = 1
+        @max = 5
     end
 
     def call
@@ -94,11 +97,9 @@ class FindDeals::CLI
 
     def get_category_input
         @input = gets.strip
+        check_quit_input_and_goodbye
         @category_input = select_category_from_input
-        if @input == 'quit'
-            goodbye
-        end  
-        
+
         if @input.to_i == 0 || @input.to_i > Categories.all.length
             invalid_input
             get_category_input
@@ -119,19 +120,64 @@ class FindDeals::CLI
         puts ""
         puts "DEALS FOR THIS INPUT"
         puts ""
-        FindDeals::Deal.all.each.with_index(1) do |deal, index|
-            puts "#{index}." 
-            puts deal.print
+        
+       print_deals_per_page
+    end
+
+    def print_deals_per_page
+        #Show 5 deals at a time of deals
+            FindDeals::Deal.all.slice(@max * (@page - 1), @max).each.with_index((@max * (@page - 1)) + 1) do |deal, index|
+                puts "#{index}." 
+                puts deal.print    
         end
+        display_other_pages
+    end
+
+    def display_other_pages
+        puts "To continue type cont"
+        if @page * @max < FindDeals::Deal.all.length
+            puts "Go to next page? Type next"
+        else 
+            puts "--------------------------------------------------------------------"
+            puts ""
+            puts "NO MORE DEALS"
+            puts "To continue type cont"
+            puts ""
+            
+        end
+
+        if @page * @max > @max
+            puts "Go to previous page? Type prev"
+        end
+
+        @input = gets.strip.downcase
+
+        if @input == "next"
+            @page += 1 
+            print_deals_per_page
+        elsif @input == "prev"
+            @page -= 1
+            print_deals_per_page
+
+        elsif @input == "cont"
+            print_more_info
+        else
+            invalid_input
+            print_deals_per_page
+        end
+        puts "Type cont to continue"
     end
     
     def print_more_info
+       
         if FindDeals::Deal.all.length != 0
             puts "--------------------------------------------------------------------"
             puts ""
             puts "Please enter the number of the deal you'd like to see more about. Type in quit to exit"
             puts ""
-            @input = gets.strip.to_i
+            @input = gets.strip
+            check_quit_input_and_goodbye
+            @input = @input.to_i
             while @input == 0 || @input > FindDeals::Deal.all.size
                 invalid_input
                 @input = gets.strip.to_i
@@ -146,9 +192,7 @@ class FindDeals::CLI
             puts "--------------------------------------------------------------------"
         end
         
-        if @input == 'quit'
-            goodbye
-        end
+        
     end
 
     def prompt_to_save_deal
@@ -166,8 +210,7 @@ class FindDeals::CLI
             @selected_deal.save(user.id) ##save to Saved Deals, with the user id as the User_id
         elsif @input == "n"
             next_steps
-        elsif @input == 'quit'
-            goodbye   
+        elsif check_quit_input_and_goodbye 
         else
             invalid_input
             prompt_to_save_deal
@@ -180,12 +223,12 @@ class FindDeals::CLI
         puts "We need to be able to associate this deal with you."
         puts "Please enter a username"
         @input = gets.strip
-        if @input == 'quit'
-            goodbye
-        else 
+        if @input != 'quit'
             puts "--------------------------------------------------------------------"
             @user_name = input
             Users.find_or_create_by(name: @user_name)
+        else
+            check_quit_input_and_goodbye
         end
     end
     
@@ -201,8 +244,7 @@ class FindDeals::CLI
             show_saved_deals
         elsif @input == "n"
             next_steps
-        elsif @input == 'quit'
-            goodbye
+        elsif check_quit_input_and_goodbye
         else 
             invalid_input
             prompt_to_show_saved_deals
@@ -219,7 +261,7 @@ class FindDeals::CLI
         puts "--------------------------------------------------------------------"
         #get id of selected_user
         user = Users.find_by(name: @user_name)
-        deals_from_user = SavedDeals.select {|deal| deal.user_id == user.id}
+        deals_from_user = SavedDeals.select {|deal| deal.user_id == user.id} 
         deals_from_user.each.with_index(1) do |deal, index|
             puts "#{index}." 
             puts deal.print
@@ -296,8 +338,7 @@ class FindDeals::CLI
         elsif @input == "delete"
             delete_record
             next_steps
-        elsif @input == "quit"
-            goodbye
+        elsif check_quit_input_and_goodbye
         else  
             invalid_input
             next_steps
@@ -323,9 +364,7 @@ class FindDeals::CLI
             puts "--------------------------------------------------------------------" 
             @input = gets.strip.downcase
             
-            if @input == 'quit'
-                goodbye
-            end
+            check_quit_input_and_goodbye
         end 
 
         SavedDeals.all.delete_from_db(user, @input.to_i)
@@ -340,6 +379,16 @@ class FindDeals::CLI
         puts "Invalid input. Please try again"
         puts ""
         puts "--------------------------------------------------------------------"
+    end
+
+    # def input=(input)
+    #     input == 'quit' ? goodbye : @input = input
+    # end
+
+    def check_quit_input_and_goodbye
+        if @input == 'quit'
+            goodbye
+        end
     end
 
     def goodbye

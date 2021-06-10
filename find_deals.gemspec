@@ -30,7 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "nokogiri"
   spec.add_dependency "require_all"
   spec.add_dependency "activerecord"
-  spec.add_dependency "sinatra-activerecord"
   spec.add_dependency "sqlite3"
 
 

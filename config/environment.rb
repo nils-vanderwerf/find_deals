@@ -3,12 +3,14 @@ require "require_all"
 
 require "nokogiri"
 require "open-uri"
+
+#Development
 require "rake"
 require "pry"
+
+#Database
 require 'active_record'
 require 'sinatra/activerecord'
-
-
 
 require_all "lib" #load up all files in the lib directory and its subdirectories
 
